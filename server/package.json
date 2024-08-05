@@ -22,7 +22,7 @@
     "seed": "node src/scripts/seed.js",
     "typeorm": "typeorm-ts-node-esm",
     "migration:create": "npm run typeorm migration:create  src/migrations/pokemon-migrations",
-    "migrate:run": "typeorm migration:run -d src/data-source.ts"
+    "migrate:run": "npx typeorm-ts-node-esm migration:run -d src/ormconfig.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
