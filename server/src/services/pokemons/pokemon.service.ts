@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pokemon } from './pokemon.entity';
+import Pokemon from '../../entities/pokemons/pokemon.entity';
+
 
 @Injectable()
 export class PokemonService {
@@ -17,8 +18,8 @@ export class PokemonService {
   async battle(pokemon1Id: number, pokemon2Id: number): Promise<any> {
     // Obtiene los Pokémon por sus IDs
     const [pokemon1, pokemon2] = await Promise.all([
-      this.pokemonRepository.findOne(pokemon1Id),
-      this.pokemonRepository.findOne(pokemon2Id),
+      this.pokemonRepository.findOne(null),
+      this.pokemonRepository.findOne(null),
     ]);
 
     // Verifica si ambos Pokémon existen

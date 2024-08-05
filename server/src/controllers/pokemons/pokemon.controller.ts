@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { PokemonService } from './pokemon.service';
-import { Pokemon } from './pokemon.entity';
+import { PokemonService } from '../../services/pokemons/pokemon.service';
+import Pokemon from '../../entities/pokemons/pokemon.entity';
+
 
 @Controller('pokemons')
 export class PokemonController {
