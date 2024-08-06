@@ -5,24 +5,24 @@ export default class Pokemon {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column()
+ @Column({ type: 'float' })
   attack: number;
 
-  @Column()
+  @Column({ type: 'float' })
   defense: number;
 
-  @Column()
+   @Column({ type: 'float' })
   hp: number;
 
-  @Column()
+   @Column({ type: 'float' })
   speed: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   type: string;
 
-  @Column()
-  imageUrl: string;
+  @Column({ type: 'varchar', length: 2048 }) 
+  imageUrl: string
 }
