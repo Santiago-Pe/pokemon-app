@@ -6,12 +6,12 @@ export class Battles {
   @PrimaryGeneratedColumn()
   id: number;
 
- @Column({ type: 'float' })
+  @Column({ type: 'int' })
   pokemon1Id: number;
 
- @Column({ type: 'float' })
+  @Column({ type: 'int' })
   pokemon2Id: number;
 
- @Column({ type: 'float' })
+  @Column({ type: 'int' })
   winnerId: number;
 }

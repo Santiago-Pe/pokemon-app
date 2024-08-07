@@ -20,40 +20,40 @@ export class BattlesService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async createBattle(pokemon1Id: number, pokemon2Id: number): Promise<Battles> {
-    const pokemon1 = await this.pokemonRepository.findOne( null);
-    const pokemon2 = await this.pokemonRepository.findOne(null);
-    let winner: Pokemons;
+  // async createBattle(pokemon1Id: number, pokemon2Id: number): Promise<Battles> {
+  //   const pokemon1 = await this.pokemonRepository.findOne( null);
+  //   const pokemon2 = await this.pokemonRepository.findOne(null);
+  //   let winner: Pokemons;
 
-    if (!pokemon1 || !pokemon2) {
-      throw new Error('Pokémon no encontrado');
-    }
+  //   if (!pokemon1 || !pokemon2) {
+  //     throw new Error('Pokémon no encontrado');
+  //   }
 
-    // Determinar el ganador basado en las reglas
-    const [first, second] = pokemon1.speed >= pokemon2.speed ? [pokemon1, pokemon2] : [pokemon2, pokemon1];
+  //   // Determinar el ganador basado en las reglas
+  //   const [first, second] = pokemon1.speed >= pokemon2.speed ? [pokemon1, pokemon2] : [pokemon2, pokemon1];
 
-    while (pokemon1.hp > 0 && pokemon2.hp > 0) {
-      const damage1 = Math.max(first.attack - second.defense, 1);
-      second.hp -= damage1;
-      if (second.hp <= 0) {
-        winner = first;
-        break;
-      }
+  //   while (pokemon1.hp > 0 && pokemon2.hp > 0) {
+  //     const damage1 = Math.max(first.attack - second.defense, 1);
+  //     second.hp -= damage1;
+  //     if (second.hp <= 0) {
+  //       winner = first;
+  //       break;
+  //     }
       
-      const damage2 = Math.max(second.attack - first.defense, 1);
-      first.hp -= damage2;
-      if (first.hp <= 0) {
-        winner = second;
-        break;
-      }
-    }
+  //     const damage2 = Math.max(second.attack - first.defense, 1);
+  //     first.hp -= damage2;
+  //     if (first.hp <= 0) {
+  //       winner = second;
+  //       break;
+  //     }
+  //   }
 
-    const battle = this.battleRepository.create({
-      pokemon1Id: pokemon1.id,
-      pokemon2Id: pokemon2.id,
-      winnerId: winner.id,
-    });
+  //   const battle = this.battleRepository.create({
+  //     pokemon1Id: pokemon1.id,
+  //     pokemon2Id: pokemon2.id,
+  //     winnerId: winner.id,
+  //   });
 
-    return this.battleRepository.save(battle);
-  }
+  //   return this.battleRepository.save(battle);
+  // }
 }
