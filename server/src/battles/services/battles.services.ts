@@ -1,5 +1,5 @@
 // src/battle/battle.service.ts
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 // Corrige el path si es necesario
@@ -46,13 +46,23 @@ export class BattlesService {
   }
 
   async createBattle(pokemon1Id: string, pokemon2Id: string): Promise<Battles> {
+    if (!pokemon1Id || !pokemon2Id) {
+      throw new BadRequestException('Both Pokémon IDs must be provided.');
+    }
+
     try {
       // Find Pokémon records
-      const pokemon1 = await this.pokemonRepository.findOne({ where: { id: pokemon1Id } });
-      const pokemon2 = await this.pokemonRepository.findOne({ where: { id: pokemon2Id } });
+      const [pokemon1, pokemon2] = await Promise.all([
+        this.pokemonRepository.findOne({ where: { id: pokemon1Id } }),
+        this.pokemonRepository.findOne({ where: { id: pokemon2Id } }),
+      ]);
 
-      if (!pokemon1 || !pokemon2) {
-        throw new Error('Pokémon not found');
+      if (!pokemon1) {
+        throw new NotFoundException(`Pokémon with ID ${pokemon1Id} not found.`);
+      }
+
+      if (!pokemon2) {
+        throw new NotFoundException(`Pokémon with ID ${pokemon2Id} not found.`);
       }
 
       let winner: Pokemons | null = null;
@@ -77,7 +87,7 @@ export class BattlesService {
       }
 
       if (!winner) {
-        throw new Error('No winner determined');
+        throw new InternalServerErrorException('No winner could be determined.');
       }
 
       // Create battle record
@@ -92,7 +102,7 @@ export class BattlesService {
       return await this.battleRepository.save(battle);
     } catch (error) {
       console.error('Error creating battle:', error);
-      throw error;
+      throw new InternalServerErrorException('An error occurred while creating the battle.');
     }
   }
 }

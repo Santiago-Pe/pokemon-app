@@ -21,7 +21,7 @@ export class PokemonsService {
     if (count === 0) {
       // Construct the path to the JSON file
       const dataFilePath = path.resolve(__dirname, '../../data/pokemons.json');
-      console.log(`Looking for data file at: ${dataFilePath}`);
+     
 
     if (fs.existsSync(dataFilePath)) {
     console.log('Data file found.');
@@ -56,11 +56,11 @@ export class PokemonsService {
     try {
       const pokemon = await this.pokemonRepository.findOne({ where: { id } });
       if (!pokemon) {
-        throw new NotFoundException(`POKEMON_NOT_FOUND`);
+        throw new NotFoundException(`Pokemon not found`);
       }
       return pokemon;
     } catch (error) {
-      throw new InternalServerErrorException('SERVER_POKEMON_ERROR');
+      throw new InternalServerErrorException('Internal pokemon server error');
     }
   }
 }
