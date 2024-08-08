@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 
 import App from "./App";
 import "./index.css";
+import { ApiProvider } from "./context/apiContext";
 
 const rootElement = document.getElementById("root");
 
@@ -12,7 +13,9 @@ if (rootElement) {
 
   root.render(
     <React.StrictMode>
-      <App />
+      <ApiProvider>
+        <App />
+      </ApiProvider>
     </React.StrictMode>
   );
 } else {

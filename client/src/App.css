@@ -1,0 +1,68 @@
+/* Reset CSS */
+
+/* Resets margin and padding for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sets a consistent font and size across all elements */
+html {
+  font-size: 100%; /* Sets the base font size to 16px */
+}
+
+body {
+  background-color: #f9f9f9; /* Sets a default background color */
+}
+
+/* Resets the default styles for lists */
+ul,
+ol {
+  list-style: none; /* Removes default list styling */
+  margin: 0;
+  padding: 0;
+}
+
+/* Resets the default styles for links */
+a {
+  text-decoration: none; /* Removes default underline */
+  color: inherit; /* Inherits color from parent */
+}
+
+/* Resets the default styles for tables */
+table {
+  border-collapse: collapse; /* Removes spacing between table cells */
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 0;
+  text-align: left;
+}
+
+/* Resets the default styles for form elements */
+input,
+textarea,
+select,
+button {
+  font: inherit; /* Ensures that form elements inherit font styles */
+  margin: 0;
+  padding: 0;
+  border: none; /* Removes default border styles */
+}
+
+/* Provides a consistent style for images */
+img {
+  max-width: 100%; /* Ensures images are responsive */
+  height: auto; /* Maintains aspect ratio */
+}
+
+.layout {
+  max-width: 1040px;
+  width: 100%;
+  margin: 0 auto;
+}
