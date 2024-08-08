@@ -1,7 +1,7 @@
 // src/battle/battle.controller.ts
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BattlesService } from '../services/battles.services';
-import { CreateBattleDto, BattleDto } from '../dto/dto.battle';
+import { CreateBattleDto, BattleDto, BattleDtoResponse } from '../dto/dto.battle';
 
 @Controller('battle')
 export class BattlesController {
@@ -13,7 +13,7 @@ export class BattlesController {
   }
 
   @Post()
-  async createBattle(@Body() createBattleDto: CreateBattleDto): Promise<BattleDto> {
+  async createBattle(@Body() createBattleDto: CreateBattleDto): Promise<BattleDtoResponse> {
     return this.battleService.createBattle(createBattleDto);
   }
 }

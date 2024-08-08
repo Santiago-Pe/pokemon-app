@@ -1,10 +1,16 @@
 // src/battle/battle.service.ts
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBattleDto, BattleDto } from '../dto/dto.battle';
-import Pokemons from '../../pokemons/entity/pokemons.entity';
+import { CreateBattleDto, BattleDto, BattleDtoResponse } from '../dto/dto.battle';
 import { Battles } from '../entity/battles.entity';
+import Pokemons from '../../pokemons/entity/pokemons.entity';
+
 
 @Injectable()
 export class BattlesService {
@@ -42,10 +48,10 @@ export class BattlesService {
         type: battle.winner.type,
         imageUrl: battle.winner.imageUrl,
       },
-    }as BattleDto));
+    }));
   }
 
-  async createBattle(createBattleDto: CreateBattleDto): Promise<BattleDto> {
+  async createBattle(createBattleDto: CreateBattleDto): Promise<BattleDtoResponse> {
     const { pokemon1Id, pokemon2Id } = createBattleDto;
 
     if (!pokemon1Id || !pokemon2Id) {
@@ -100,9 +106,9 @@ export class BattlesService {
 
       return {
         id: savedBattle.id,
-        pokemon1: pokemon1,
-        pokemon2: pokemon2,
-        winner: winner,
+        pokemon1Id: pokemon1.id,
+        pokemon2Id: pokemon2.id,
+        winnerId: winner.id,
       };
     } catch (error) {
       console.error('Error creating battle:', error);
