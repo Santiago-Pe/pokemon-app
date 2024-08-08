@@ -2,9 +2,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Battles } from '../entity/battles.entity';
+// Corrige el path si es necesario
 import Pokemons from '../../pokemons/entity/pokemons.entity';
-
+import { Battles } from '../entity/battles.entity';
 
 @Injectable()
 export class BattlesService {
@@ -15,45 +15,84 @@ export class BattlesService {
     private readonly pokemonRepository: Repository<Pokemons>,
   ) {}
 
-  findAll(): Promise<Battles[]> {
-    return this.battleRepository.find();
+  async findAllWithDetails(): Promise<any[]> {
+    const battles = await this.battleRepository.createQueryBuilder('battle')
+      .leftJoinAndSelect('battle.pokemon1', 'pokemon1')
+      .leftJoinAndSelect('battle.pokemon2', 'pokemon2')
+      .leftJoinAndSelect('battle.winner', 'winner')
+      .getMany();
+
+    return battles.map(battle => ({
+      id: battle.id,
+      pokemon1: {
+        id: battle.pokemon1.id,
+        name: battle.pokemon1.name,
+        type: battle.pokemon1.type,
+        imageUrl: battle.pokemon1.imageUrl,
+      },
+      pokemon2: {
+        id: battle.pokemon2.id,
+        name: battle.pokemon2.name,
+        type: battle.pokemon2.type,
+        imageUrl: battle.pokemon2.imageUrl,
+      },
+      winner: {
+        id: battle.winner.id,
+        name: battle.winner.name,
+        type: battle.winner.type,
+        imageUrl: battle.winner.imageUrl,
+      },
+    }));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // async createBattle(pokemon1Id: number, pokemon2Id: number): Promise<Battles> {
-  //   const pokemon1 = await this.pokemonRepository.findOne( null);
-  //   const pokemon2 = await this.pokemonRepository.findOne(null);
-  //   let winner: Pokemons;
+  async createBattle(pokemon1Id: string, pokemon2Id: string): Promise<Battles> {
+    try {
+      // Find Pokémon records
+      const pokemon1 = await this.pokemonRepository.findOne({ where: { id: pokemon1Id } });
+      const pokemon2 = await this.pokemonRepository.findOne({ where: { id: pokemon2Id } });
 
-  //   if (!pokemon1 || !pokemon2) {
-  //     throw new Error('Pokémon no encontrado');
-  //   }
+      if (!pokemon1 || !pokemon2) {
+        throw new Error('Pokémon not found');
+      }
 
-  //   // Determinar el ganador basado en las reglas
-  //   const [first, second] = pokemon1.speed >= pokemon2.speed ? [pokemon1, pokemon2] : [pokemon2, pokemon1];
+      let winner: Pokemons | null = null;
 
-  //   while (pokemon1.hp > 0 && pokemon2.hp > 0) {
-  //     const damage1 = Math.max(first.attack - second.defense, 1);
-  //     second.hp -= damage1;
-  //     if (second.hp <= 0) {
-  //       winner = first;
-  //       break;
-  //     }
-      
-  //     const damage2 = Math.max(second.attack - first.defense, 1);
-  //     first.hp -= damage2;
-  //     if (first.hp <= 0) {
-  //       winner = second;
-  //       break;
-  //     }
-  //   }
+      // Determine the winner
+      const [first, second] = pokemon1.speed >= pokemon2.speed ? [pokemon1, pokemon2] : [pokemon2, pokemon1];
 
-  //   const battle = this.battleRepository.create({
-  //     pokemon1Id: pokemon1.id,
-  //     pokemon2Id: pokemon2.id,
-  //     winnerId: winner.id,
-  //   });
+      while (pokemon1.hp > 0 && pokemon2.hp > 0) {
+        const damage1 = Math.max(first.attack - second.defense, 1);
+        second.hp -= damage1;
+        if (second.hp <= 0) {
+          winner = first;
+          break;
+        }
 
-  //   return this.battleRepository.save(battle);
-  // }
+        const damage2 = Math.max(second.attack - first.defense, 1);
+        first.hp -= damage2;
+        if (first.hp <= 0) {
+          winner = second;
+          break;
+        }
+      }
+
+      if (!winner) {
+        throw new Error('No winner determined');
+      }
+
+      // Create battle record
+      const battle = this.battleRepository.create({
+        pokemon1Id: pokemon1.id,
+        pokemon2Id: pokemon2.id,
+        winnerId: winner.id,
+      });
+
+      // Save battle record
+      console.log('Saving battle:', battle);
+      return await this.battleRepository.save(battle);
+    } catch (error) {
+      console.error('Error creating battle:', error);
+      throw error;
+    }
+  }
 }

@@ -6,6 +6,7 @@ import { PokemonsService } from '../services/pokemons.services';
 import { PokemonsController } from '../controller/pokemons.controller';
 
 
+
 @Module({
   imports: [TypeOrmModule.forFeature([Pokemons])],
   providers: [PokemonsService],
