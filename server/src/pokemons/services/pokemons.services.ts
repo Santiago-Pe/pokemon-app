@@ -7,6 +7,7 @@ import Pokemons from '../entity/pokemons.entity';
 import * as fs from 'fs';
 import path from 'path';
 import { AppDataSource } from '../../ormconfig';
+import { PokemonDetailedDto, PokemonSimpleDto } from '../dto/pokemon.dto';
 
 @Injectable()
 export class PokemonsService {
@@ -47,18 +48,33 @@ export class PokemonsService {
   }
 
   // Services to get all pokemons
-  findAll(): Promise<Pokemons[]> {
-    return this.pokemonRepository.find();
+async findAll(): Promise<PokemonSimpleDto[]> {
+    const pokemons = await this.pokemonRepository.find({
+      select: ['id', 'name', 'imageUrl'],
+    });
+    return pokemons.map(pokemon => ({
+      id: pokemon.id,
+      name: pokemon.name,
+      imageUrl: pokemon.imageUrl,
+    }));
   }
-
   // Services to get pokemon by id
- async findOne(id: string): Promise<Pokemons> {
+ async findOne(id: string): Promise<PokemonDetailedDto> {
     try {
       const pokemon = await this.pokemonRepository.findOne({ where: { id } });
       if (!pokemon) {
         throw new NotFoundException(`Pokemon not found`);
       }
-      return pokemon;
+      return {
+        id: pokemon.id,
+        name: pokemon.name,
+        attack: pokemon.attack,
+        defense: pokemon.defense,
+        hp: pokemon.hp,
+        speed: pokemon.speed,
+        type: pokemon.type,
+        imageUrl: pokemon.imageUrl,
+      };
     } catch (error) {
       throw new InternalServerErrorException('Internal pokemon server error');
     }

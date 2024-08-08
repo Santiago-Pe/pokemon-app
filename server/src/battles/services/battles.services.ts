@@ -2,7 +2,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// Corrige el path si es necesario
+import { CreateBattleDto, BattleDto } from '../dto/dto.battle';
 import Pokemons from '../../pokemons/entity/pokemons.entity';
 import { Battles } from '../entity/battles.entity';
 
@@ -15,7 +15,7 @@ export class BattlesService {
     private readonly pokemonRepository: Repository<Pokemons>,
   ) {}
 
-  async findAllWithDetails(): Promise<any[]> {
+  async findAllWithDetails(): Promise<BattleDto[]> {
     const battles = await this.battleRepository.createQueryBuilder('battle')
       .leftJoinAndSelect('battle.pokemon1', 'pokemon1')
       .leftJoinAndSelect('battle.pokemon2', 'pokemon2')
@@ -42,16 +42,17 @@ export class BattlesService {
         type: battle.winner.type,
         imageUrl: battle.winner.imageUrl,
       },
-    }));
+    }as BattleDto));
   }
 
-  async createBattle(pokemon1Id: string, pokemon2Id: string): Promise<Battles> {
+  async createBattle(createBattleDto: CreateBattleDto): Promise<BattleDto> {
+    const { pokemon1Id, pokemon2Id } = createBattleDto;
+
     if (!pokemon1Id || !pokemon2Id) {
       throw new BadRequestException('Both Pokémon IDs must be provided.');
     }
 
     try {
-      // Find Pokémon records
       const [pokemon1, pokemon2] = await Promise.all([
         this.pokemonRepository.findOne({ where: { id: pokemon1Id } }),
         this.pokemonRepository.findOne({ where: { id: pokemon2Id } }),
@@ -67,7 +68,6 @@ export class BattlesService {
 
       let winner: Pokemons | null = null;
 
-      // Determine the winner
       const [first, second] = pokemon1.speed >= pokemon2.speed ? [pokemon1, pokemon2] : [pokemon2, pokemon1];
 
       while (pokemon1.hp > 0 && pokemon2.hp > 0) {
@@ -90,16 +90,20 @@ export class BattlesService {
         throw new InternalServerErrorException('No winner could be determined.');
       }
 
-      // Create battle record
       const battle = this.battleRepository.create({
         pokemon1Id: pokemon1.id,
         pokemon2Id: pokemon2.id,
         winnerId: winner.id,
       });
 
-      // Save battle record
-      console.log('Saving battle:', battle);
-      return await this.battleRepository.save(battle);
+      const savedBattle = await this.battleRepository.save(battle);
+
+      return {
+        id: savedBattle.id,
+        pokemon1: pokemon1,
+        pokemon2: pokemon2,
+        winner: winner,
+      };
     } catch (error) {
       console.error('Error creating battle:', error);
       throw new InternalServerErrorException('An error occurred while creating the battle.');
