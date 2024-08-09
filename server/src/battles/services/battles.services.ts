@@ -106,9 +106,7 @@ export class BattlesService {
 
       return {
         id: savedBattle.id,
-        pokemon1Id: pokemon1.id,
-        pokemon2Id: pokemon2.id,
-        winnerId: winner.id,
+        winner: winner,
       };
     } catch (error) {
       console.error('Error creating battle:', error);

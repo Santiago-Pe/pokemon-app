@@ -26,7 +26,5 @@ export class BattleDto {
 
 export class BattleDtoResponse {
   id: number;
-  pokemon1Id: string;
-  pokemon2Id: string;
-  winnerId: string;
+  winner: PokemonDto;
 }
