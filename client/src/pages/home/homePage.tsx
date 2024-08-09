@@ -1,39 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { Pokemon } from "../../interfaces/global.interfaces";
 import { useApi } from "../../context/apiContext";
-import { SmallCard } from "../../components";
-
+import { Link, Typography } from "@mui/material";
+import { Battle, PokemonList } from "../../sections";
+import Loading from "../../components/loader/loading/loading";
 import styles from "./homePage.module.css";
+import { useBattleStore } from "../../store/battle/battle.store";
 
 const Home: React.FC = () => {
-  const { getPokemons, getBattles } = useApi();
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const { getPokemons } = useApi();
+  const { setAllPokemons, allPokemons } = useBattleStore();
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allPokemons = await getPokemons();
-        setPokemons(allPokemons);
+        const fetchedPokemons = await getPokemons();
+        setAllPokemons(fetchedPokemons);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [getPokemons, getBattles]);
+  }, [getPokemons, setAllPokemons]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <section>
-      <h1>Pokémon Battles</h1>
-      <ul className={styles.containerList}>
-        {pokemons.map((pokemon) => (
-          <SmallCard
-            imageUrl={pokemon.imageUrl}
-            name={pokemon.name}
-            key={pokemon.id}
-          />
-        ))}
-      </ul>
+    <section className={styles.container}>
+      <Typography variant="h4" component="h1" className={styles.title}>
+        Pokémon Battles
+      </Typography>
+      <Link href="/battle-log" underline="none">
+        Logs
+      </Link>
+      <Typography variant="h5" component="h2" className={styles.subtitle}>
+        Select your pokemon
+      </Typography>
+
+      <PokemonList />
+      {allPokemons.length > 0 && <Battle />}
     </section>
   );
 };

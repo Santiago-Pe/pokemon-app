@@ -1,5 +1,13 @@
-.containerList {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.title {
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  margin-bottom: 24px;
 }

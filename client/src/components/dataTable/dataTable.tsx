@@ -1,5 +1,5 @@
-// src/sections/dataTable/dataTable.tsx
-import * as React from "react";
+// src/components/DataTable.tsx
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,54 +8,68 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
+interface Pokemon {
+  id: string;
+  name: string;
+  type: string;
+  imageUrl: string;
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+interface Battle {
+  id: number;
+  pokemon1: Pokemon;
+  pokemon2: Pokemon;
+  winner: Pokemon;
+}
 
-export default function DataTable() {
+interface DataTableProps {
+  rows: Battle[];
+}
+
+const DataTable: React.FC<DataTableProps> = ({ rows }) => {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="battle table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Pokemon 1</TableCell>
+            <TableCell>Pokemon 2</TableCell>
+            <TableCell>Winner</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
+          {rows.map((battle) => (
+            <TableRow key={battle.id}>
+              <TableCell>
+                <img
+                  src={battle.pokemon1.imageUrl}
+                  alt={battle.pokemon1.name}
+                  width={50}
+                />
+                <div>{battle.pokemon1.name}</div>
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell>
+                <img
+                  src={battle.pokemon2.imageUrl}
+                  alt={battle.pokemon2.name}
+                  width={50}
+                />
+                <div>{battle.pokemon2.name}</div>
+              </TableCell>
+              <TableCell>
+                <img
+                  src={battle.winner.imageUrl}
+                  alt={battle.winner.name}
+                  width={50}
+                />
+                <div>{battle.winner.name}</div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
-}
+};
+
+export default DataTable;

@@ -1,0 +1,34 @@
+/* BattleSection.module.css */
+.battleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex: wrap;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.battleCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.vsText {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+@media (max-width: 700px) {
+  .battleContainer {
+    flex-direction: column;
+  }
+}

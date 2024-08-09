@@ -1,16 +1,22 @@
 // src/battlelog/battlelogPage.tsx
 import React from "react";
-import { Typography } from "@mui/material";
+import { Link, Typography } from "@mui/material";
 import { BattleLogSection } from "../../sections";
+import styles from "./battleLogPage.module.css";
 
 const Battlelog = () => {
   return (
-    <>
-      <Typography variant="h4" component="h2">
-        Battle Log
+    <section className={styles.container}>
+      <Typography variant="h4" component="h2" className={styles.title}>
+        Pokémon Battles Logs
       </Typography>
-      <BattleLogSection />
-    </>
+      <Link href="/" underline="none">
+        Home
+      </Link>
+      <div className={styles.table}>
+        <BattleLogSection />
+      </div>
+    </section>
   );
 };
 

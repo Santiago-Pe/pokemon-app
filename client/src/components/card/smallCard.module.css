@@ -1,0 +1,42 @@
+.cardContainer {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card {
+  width: 150px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.cardImage {
+  width: auto;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.cardContent {
+  padding: 8px 0;
+}
+
+.cardTitle {
+  font-size: 14px;
+  color: #6c757d; /* Color similar a `text.secondary` en MUI */
+}
+
+.cardContainer:hover .card {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cardSelected {
+  border: 2px solid #007bff; /* Color de borde para el Pokémon seleccionado */
+}
+
+.cardDisabled {
+  opacity: 0.5; /* Hacer el card más tenue para indicar que está deshabilitado */
+  pointer-events: none; /* Deshabilitar eventos de clic */
+}

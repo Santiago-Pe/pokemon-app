@@ -1,0 +1,14 @@
+/* src/battlelog/battlelogPage.module.css */
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.title {
+  margin-bottom: 16px; /* Espaciado debajo del título */
+}
+
+.table {
+  margin-top: 20px; /* Espaciado encima de la tabla */
+}

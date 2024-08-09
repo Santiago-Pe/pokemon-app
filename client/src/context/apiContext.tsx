@@ -4,10 +4,13 @@ import { ApiContextProps } from "./apiContex.interfaces";
 
 const ApiContext = createContext<ApiContextProps | undefined>(undefined);
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const getPokemons = async () => {
+    await delay(2000); // Retraso de 2 segundos
     try {
       const response = await axiosInstance.get("/pokemons");
       return response.data;
@@ -18,6 +21,7 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const getPokemonById = async (id: string) => {
+    await delay(2000); // Retraso de 2 segundos
     try {
       const response = await axiosInstance.get(`/pokemons/${id}`);
       return response.data;
@@ -28,10 +32,11 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const postBattle = async (pokemon1Id: string, pokemon2Id: string) => {
+    await delay(2000); // Retraso de 2 segundos
     try {
-      const response = await axiosInstance.post("/battles", {
-        pokemon1Id,
-        pokemon2Id,
+      const response = await axiosInstance.post("/battle", {
+        pokemon1Id: pokemon1Id,
+        pokemon2Id: pokemon2Id,
       });
       return response.data;
     } catch (error) {
@@ -41,8 +46,9 @@ export const ApiProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const getBattles = async () => {
+    await delay(2000); // Retraso de 2 segundos
     try {
-      const response = await axiosInstance.get("/battles");
+      const response = await axiosInstance.get("/battle");
       return response.data;
     } catch (error) {
       console.error("Error fetching battles:", error);
