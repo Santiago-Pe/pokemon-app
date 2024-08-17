@@ -13,6 +13,7 @@ const SmallCard: React.FC<CardProps> = ({
   isDisabled = false,
 }) => {
   return (
+<<<<<<< Updated upstream
     <div
       onClick={isDisabled ? undefined : onClick}
       className={`${styles.cardContainer} ${
@@ -26,6 +27,17 @@ const SmallCard: React.FC<CardProps> = ({
         <img src={imageUrl} alt={name} className={styles.cardImage} />
         <CardContent className={styles.cardContent}>
           <Typography className={styles.cardTitle} gutterBottom>
+=======
+    <Box sx={{ maxWidth: 150 }}>
+      <Card>
+        <img
+          src={imageUrl}
+          alt={name}
+          style={{ width: "100%", height: "200px" }}
+        />
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+>>>>>>> Stashed changes
             {name}
           </Typography>
         </CardContent>
